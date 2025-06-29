@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Blue Slinky Animation</title>
+  <style>
+    label {
+      display: flex;
+      cursor: pointer;
+      font-weight: 500;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 0.375em;
+    }
+    body { margin: 0; overflow: hidden; background: #000; }
+    canvas { display: block; }
+  </style>
+</head>
+<body>
+<script type="module">
+import * as THREE from 'https://unpkg.com/three@0.153.0/build/three.module.js';
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x000000);
+
+const camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 100);
+camera.position.set(0, 0, 15);
+
+const renderer = new THREE.WebGLRenderer({antialias: true});
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
+
+// Slinky parameters
+const numRings = 8;
+const rings = [];
+const color = new THREE.Color(0x00aaff);
+const material = new THREE.MeshBasicMaterial({ color, wireframe: true });
+
+for (let i = 0; i < numRings; i++) {
+  const geometry = new THREE.TorusGeometry(2, 0.08, 16, 100);
+  const ring = new THREE.Mesh(geometry, material.clone());
+  ring.material.color = color;
+  ring.material.transparent = true;
+  ring.material.opacity = 0.8;
+  ring.material.emissive = color;
+  ring.material.emissiveIntensity = 0.7;
+  scene.add(ring);
+  rings.push(ring);
+}
+
+// Animation loop
+function animate(time) {
+  time = time * 0.002;
+  for (let i = 0; i < numRings; i++) {
+    const ring = rings[i];
+    const phase = time + i * 0.4;
+    ring.position.y = Math.sin(phase) * 2;
+    ring.position.x = Math.cos(phase) * 2;
+    ring.position.z = i * 0.5;
+    ring.rotation.x = phase;
+    ring.rotation.y = phase * 0.7;
+  }
+  renderer.render(scene, camera);
+  requestAnimationFrame(animate);
+}
+
+animate();
+
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+</script>
+</body>
+</html> 

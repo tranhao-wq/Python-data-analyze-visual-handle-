@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Interactive 3D Smartwatches - Three.js</title>
+  <style>
+    label {
+      display: flex;
+      cursor: pointer;
+      font-weight: 500;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 0.375em;
+    }
+    body { margin: 0; overflow: hidden; }
+    canvas { display: block; }
+    #info {
+      position: absolute; top: 10px; left: 10px; color: #fff; background: rgba(0,0,0,0.5); padding: 10px;
+      font-family: sans-serif; z-index: 1;
+    }
+  </style>
+</head>
+<body>
+<div id="info">Click a watch to highlight it!</div>
+<script src="https://cdn.jsdelivr.net/npm/three@0.153.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.153.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+  // Scene setup
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0xeeeeee);
+
+  const camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 100);
+  camera.position.set(0, 5, 15);
+
+  const renderer = new THREE.WebGLRenderer({antialias: true});
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(renderer.domElement);
+
+  // Controls
+  const controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+  // Lighting
+  const ambient = new THREE.AmbientLight(0xffffff, 0.7);
+  scene.add(ambient);
+  const dirLight = new THREE.DirectionalLight(0xffffff, 0.7);
+  dirLight.position.set(5, 10, 7);
+  scene.add(dirLight);
+
+  // Smartwatch model function
+  function createSmartwatch(color = 0x222222, accent = 0x0077ff) {
+    const group = new THREE.Group();
+
+    // Watch body
+    const bodyGeo = new THREE.CylinderGeometry(1, 1, 0.4, 32);
+    const bodyMat = new THREE.MeshStandardMaterial({color});
+    const body = new THREE.Mesh(bodyGeo, bodyMat);
+    group.add(body);
+
+    // Bezel
+    const bezelGeo = new THREE.TorusGeometry(1.05, 0.07, 16, 100);
+    const bezelMat = new THREE.MeshStandardMaterial({color: 0x888888});
+    const bezel = new THREE.Mesh(bezelGeo, bezelMat);
+    bezel.rotation.x = Math.PI/2;
+    group.add(bezel);
+
+    // Watch face
+    const faceGeo = new THREE.CylinderGeometry(0.92, 0.92, 0.05, 32);
+    const faceMat = new THREE.MeshStandardMaterial({color: 0x111111, emissive: accent, emissiveIntensity: 0.1});
+    const face = new THREE.Mesh(faceGeo, faceMat);
+    face.position.y = 0.225;
+    group.add(face);
+
+    // Strap (top and bottom)
+    const strapGeo = new THREE.BoxGeometry(0.5, 2.2, 0.18);
+    const strapMat = new THREE.MeshStandardMaterial({color: accent});
+    const strap1 = new THREE.Mesh(strapGeo, strapMat);
+    strap1.position.y = 1.3;
+    group.add(strap1);
+    const strap2 = new THREE.Mesh(strapGeo, strapMat);
+    strap2.position.y = -1.3;
+    group.add(strap2);
+
+    // Crown (side button)
+    const crownGeo = new THREE.CylinderGeometry(0.11, 0.11, 0.18, 16);
+    const crownMat = new THREE.MeshStandardMaterial({color: 0xff3333});
+    const crown = new THREE.Mesh(crownGeo, crownMat);
+    crown.position.set(1, 0.3, 0);
+    crown.rotation.z = Math.PI/2;
+    group.add(crown);
+
+    // Save for interaction
+    group.userData = { body, face, accent, color, selected: false };
+    return group;
+  }
+
+  // Create and position 5 watches
+  const watches = [];
+  const colors = [0x222222, 0x444444, 0x222244, 0x224422, 0x442222];
+  const accents = [0x0077ff, 0xff7700, 0x00ff77, 0xff0077, 0x7777ff];
+  for (let i = 0; i < 5; i++) {
+    const watch = createSmartwatch(colors[i], accents[i]);
+    watch.position.x = (i - 2) * 3.2;
+    scene.add(watch);
+    watches.push(watch);
+  }
+
+  // Raycaster for click detection
+  const raycaster = new THREE.Raycaster();
+  const mouse = new THREE.Vector2();
+
+  function onClick(event) {
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+    raycaster.setFromCamera(mouse, camera);
+
+    const intersects = raycaster.intersectObjects(watches, true);
+    if (intersects.length > 0) {
+      // Find the parent group (watch)
+      let obj = intersects[0].object;
+      while (obj.parent && !watches.includes(obj)) obj = obj.parent;
+      watches.forEach(w => {
+        w.userData.selected = false;
+        w.userData.body.material.color.set(w.userData.color);
+        w.userData.face.material.emissive.set(w.userData.accent);
+      });
+      obj.userData.selected = true;
+      obj.userData.body.material.color.set(0xffff00); // Highlight body
+      obj.userData.face.material.emissive.set(0xffff00); // Highlight face
+    }
+  }
+  window.addEventListener('click', onClick, false);
+
+  // Animation loop
+  function animate() {
+    requestAnimationFrame(animate);
+    watches.forEach(watch => {
+      if (!watch.userData.selected) {
+        watch.rotation.y += 0.01;
+      }
+    });
+    controls.update();
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  // Responsive resize
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth/window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+</script>
+</body>
+</html>
