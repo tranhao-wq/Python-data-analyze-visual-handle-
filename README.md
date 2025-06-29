@@ -1,6 +1,33 @@
-# Data Visualization Project
+![image](https://github.com/user-attachments/assets/023c99e2-fbf5-48d1-9cf9-a6f75af3c8fd)# Data Visualization Project
 
 This project is a collection of Python scripts that demonstrate various types of data visualizations using `matplotlib`, `geopandas`, and other libraries. Each script is designed to showcase a specific chart or plot type, along with example data and use cases. The project is organized for easy exploration and extension.
+## Pics
+![image](https://github.com/user-attachments/assets/a88ac727-1b11-4c04-9310-1abf4f12d47b)
+![image](https://github.com/user-attachments/assets/d99ff8b7-f263-462f-b062-580702d29806)
+![image](https://github.com/user-attachments/assets/7b7950f8-ba13-4fff-b49d-937ece487747)
+![image](https://github.com/user-attachments/assets/efcf7784-624f-41e5-ab98-e861b104a1f3)
+![image](https://github.com/user-attachments/assets/96d0f5af-ec65-4989-b29e-68549e7cd029)
+![image](https://github.com/user-attachments/assets/c6f44524-26ce-47d3-8486-28b283f7f2c8)
+![image](https://github.com/user-attachments/assets/c2830177-f5a7-49e7-8e6c-f89eac609596)
+![image](https://github.com/user-attachments/assets/10b2d9a1-5329-4833-820d-24b5b519e6f6)
+![image](https://github.com/user-attachments/assets/b1226840-7e08-4500-af0d-2135c4974621)
+![image](https://github.com/user-attachments/assets/8739b6cb-be7f-4e1c-8cd3-ff4ef06b8040)
+![image](https://github.com/user-attachments/assets/e3885ed0-b598-49ee-9aac-8095cf4bd7aa)
+![image](https://github.com/user-attachments/assets/a45c317c-3a22-4717-917e-ed2c6ab07aee)
+![image](https://github.com/user-attachments/assets/145e1413-c7f8-454c-b49b-53f229e82f73)
+![image](https://github.com/user-attachments/assets/ee21d4a6-1492-48b4-a87d-6c81f4261571)
+![image](https://github.com/user-attachments/assets/ddfc7194-f8ad-4a78-b702-93717f3239c6)
+![image](https://github.com/user-attachments/assets/9d7463bb-ac38-4c42-a021-524f639fee88)
+![image](https://github.com/user-attachments/assets/bba950e9-276f-4bb1-b6af-f04f3ba1dcce)
+![image](https://github.com/user-attachments/assets/9e93e11b-9314-4338-8aa0-6dabc25fec23)
+![image](https://github.com/user-attachments/assets/52a996dd-80e4-46eb-bcc6-8b502b819d7d)
+![image](https://github.com/user-attachments/assets/243f66e8-33ee-473e-8ae8-699972f7ed77)
+![image](https://github.com/user-attachments/assets/1b79000d-f329-421d-9878-896dd46d70bb)
+![image](https://github.com/user-attachments/assets/b1e4cd2d-2cf3-4ef6-896d-74fcab17a793)
+![image](https://github.com/user-attachments/assets/b51e483e-c4c5-4754-9583-a95c056b7f12)
+![image](https://github.com/user-attachments/assets/86b1c89c-c3e1-429c-83fa-386afbecbf1c)
+![image](https://github.com/user-attachments/assets/0d9671b1-4474-47d8-bb2a-8ab930b42afe)
+![image](https://github.com/user-attachments/assets/618898e4-b82f-410d-af95-3bfd250b7fe1)
 
 ## Project Structure
 
